@@ -55,3 +55,11 @@ To avoid the common "utility class soup" in Tailwind projects, I extracted compl
    ```bash
    npm test
    ```
+
+### Future Roadmap
+
+- Real-time Stream: Integration of WebSockets or Server-Sent Events (SSE) to simulate live industrial traffic and handle asynchronous state updates.
+
+- Advanced Debouncing: Implementing a search debounce for datasets exceeding 50,000 records to further optimize the main thread and prevent UI stuttering.
+
+- A11y Compliance: Further enhancement of ARIA labels, focus management, and keyboard navigation for full WCAG compliance in enterprise environments.
