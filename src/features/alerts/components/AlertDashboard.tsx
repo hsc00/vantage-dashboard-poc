@@ -1,21 +1,11 @@
-import { useRef } from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
 import { useAlertFilters } from "../hooks/useAlertFilters";
-import { AlertRow } from "./AlertRow";
 import { SearchBar } from "./SearchBar";
+import { VirtualizedAlertList } from "./VirtualizedList";
 import { ALERT_TABLE_LAYOUT } from "../constants";
 
 export const AlertDashboard = () => {
   const { filter, setFilter, search, setSearch, filteredAlerts } =
     useAlertFilters();
-  const parentRef = useRef<HTMLDivElement>(null);
-
-  const rowVirtualizer = useVirtualizer({
-    count: filteredAlerts.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 48,
-    overscan: 5,
-  });
 
   return (
     <div className="flex flex-col h-screen bg-brand-dark text-white p-4 sm:p-6 font-sans">
@@ -51,35 +41,7 @@ export const AlertDashboard = () => {
           <span className={ALERT_TABLE_LAYOUT.MESSAGE}>Description</span>
           <span className={ALERT_TABLE_LAYOUT.SOURCE_IP}>Source IP</span>
         </div>
-
-        <div ref={parentRef} className="flex-1 overflow-auto relative">
-          {filteredAlerts.length > 0 ? (
-            <div
-              style={{
-                height: `${rowVirtualizer.getTotalSize()}px`,
-                width: "100%",
-                position: "relative",
-              }}
-            >
-              {rowVirtualizer.getVirtualItems().map((virtualRow) => (
-                <div
-                  key={virtualRow.index}
-                  className="absolute top-0 left-0 w-full"
-                  style={{
-                    height: `${virtualRow.size}px`,
-                    transform: `translateY(${virtualRow.start}px)`,
-                  }}
-                >
-                  <AlertRow index={virtualRow.index} data={filteredAlerts} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-full text-gray-500">
-              <p className="text-sm">No alerts match your search criteria.</p>
-            </div>
-          )}
-        </div>
+        <VirtualizedAlertList alerts={filteredAlerts} />
       </div>
     </div>
   );
