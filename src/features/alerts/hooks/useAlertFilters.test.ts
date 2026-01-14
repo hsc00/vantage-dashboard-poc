@@ -6,17 +6,19 @@ vi.mock("../../../mocks/mock-data.json", () => ({
   default: [
     {
       id: "1",
+      timestamp: "2026-01-18T10:00:00Z",
+      sensor: "Sensor A",
       severity: "high",
-      timestamp: "2026-01-14T12:00:00Z",
-      description: "High Alert",
-      sourceIp: "1.1.1.1",
+      ip: "2.2.2.2",
+      message: "High Alert",
     },
     {
       id: "2",
-      severity: "low",
       timestamp: "2026-01-14T10:00:00Z",
-      description: "Low Alert",
-      sourceIp: "2.2.2.2",
+      sensor: "Sensor B",
+      severity: "low",
+      ip: "2.2.2.2",
+      message: "Low Alert",
     },
   ],
 }));
