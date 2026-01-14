@@ -1,0 +1,29 @@
+{
+  "critical": [
+    "SQL Injection attempt detected on primary database cluster",
+    "Unauthorized root access via SSH from blacklisted IP",
+    "Ransomware activity identified in File Server storage",
+    "DDoS attack in progress - traffic spike exceeding 400%",
+    "Kernel panic detected on Industrial Controller v4.2",
+    "Emergency: Core cooling system sensor failure",
+    "Exploit: Buffer overflow attempt on web server gateway"
+  ],
+  "high": [
+    "Multiple failed login attempts for user 'admin'",
+    "User 'operator_1' logged in from unusual location: Russia",
+    "UPS Battery capacity critically low - below 10%",
+    "Unencrypted sensitive data transfer detected (Port 80)",
+    "Temperature threshold exceeded in Server Room A",
+    "Firmware checksum mismatch on Edge-Node-07",
+    "High memory pressure detected on microservices-host"
+  ],
+  "low": [
+    "New firmware version available for Secure Gateway",
+    "Weekly automated security audit report generated",
+    "Minor packet loss detected on Subnet B (0.5%)",
+    "Scheduled maintenance window starts in 60 minutes",
+    "Configuration backup to Cloud-Bucket-1 completed",
+    "NTP synchronization delay: 200ms",
+    "Internal DNS query latency above 50ms"
+  ]
+}
