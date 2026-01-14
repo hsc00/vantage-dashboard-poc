@@ -8,7 +8,7 @@ export const formatAlertTimestamp = (timestamp: string): string => {
     date.getFullYear() === now.getFullYear();
 
   if (isToday) {
-    return date.toLocaleTimeString([], {
+    return date.toLocaleTimeString("en-GB", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
@@ -16,7 +16,7 @@ export const formatAlertTimestamp = (timestamp: string): string => {
   }
 
   return date
-    .toLocaleString([], {
+    .toLocaleString("en-GB", {
       day: "2-digit",
       month: "2-digit",
       hour: "2-digit",
