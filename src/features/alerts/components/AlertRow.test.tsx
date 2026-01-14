@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { AlertRow } from "./AlertRow";
-import { Alert } from "../types";
+import type { Alert } from "../types";
 
 const MOCK_DATA: Alert[] = [
   {
