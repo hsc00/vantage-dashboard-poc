@@ -1,5 +1,7 @@
 # Vantage Analytics Dashboard
 
+![CI Status](https://github.com/hsc00/vantage-poc/actions/workflows/ci.yml/badge.svg)
+
 A high-performance Cybersecurity Alert Dashboard implementation, inspired by the **Nozomi Networks Vantage** product. This project focuses on data density, rendering efficiency, and logical robustness in mission critical environments.
 
 ## Key Features
@@ -34,6 +36,17 @@ I followed a testing strategy focused on high-value coverage:
 ### 3. Maintainability & "Clean Code"
 
 To avoid the common "utility class soup" in Tailwind projects, I extracted complex styling patterns into static constants at the bottom of component files. This separates **Layout Structure** from **Styling Configuration**, making the code more readable and easier to audit during Peer Reviews.
+
+## 4. CI/CD & Security Measures
+
+This project follows a "Security by Design" approach, implementing a professional pipeline and code provenance:
+
+- **Automated Static Analysis (SAST):** Since enterprise tools like SonarQube or GitHub CodeQL require specific licensing for private repositories, I have integrated **SonarJS** and **ESLint Security** plugins directly into the local development and CI workflow. This ensures:
+  - **Cognitive Complexity Monitoring:** Functions are kept simple and maintainable (capped at a complexity score of 15).
+  - **Vulnerability Detection:** Real-time scanning for insecure patterns, such as object injections or ReDoS.
+- **GitHub Actions CI:** A dedicated workflow automatically triggers on every push to the `main` branch, running the full test suite and type-checking to prevent regressions.
+- **Git Hooks & Quality Gates:** Using **Husky** and **lint-staged**, the project enforces that only code passing all linting and security rules can be committed.
+- **Commit Provenance:** To ensure code integrity and authorship, all commits are cryptographically signed using **GPG**.
 
 ---
 
