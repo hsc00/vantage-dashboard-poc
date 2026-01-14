@@ -1,3 +1,8 @@
+/**
+ * "use no memo" - Opt-out directive for the React Compiler (React 19).
+ * TanStack Virtual uses internal state and ref patterns that are currently
+ * incompatible with the compiler auto memoization logic.
+ */
 "use no memo";
 
 import { useRef } from "react";
@@ -12,6 +17,12 @@ interface Props {
 export const VirtualizedAlertList = ({ alerts }: Props) => {
   const parentRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * We disable incompatible-library because useVirtualizer returns non-memoizable functions
+   * that would trigger infinite re-render warnings in the new React linting suite.
+   * This is a known compatibility gap between TanStack Virtual and React 19.
+   */
+  // eslint-disable-next-line react-hooks/incompatible-library
   const rowVirtualizer = useVirtualizer({
     count: alerts.length,
     getScrollElement: () => parentRef.current,

@@ -1,8 +1,3 @@
-/* * eslint-disable security/detect-object-injection
- * This rule is disabled for this file because the linter produces false positives
- * during data flow analysis even with switch cases or Maps.
- * The severity styles are strictly mapped to our domain model and are safe.
- */
 import { memo } from "react";
 import type { Alert } from "../types";
 import { ALERT_TABLE_LAYOUT } from "../constants";
@@ -27,6 +22,7 @@ const getSeverityStyles = (severity: string) => {
   }
 };
 
+/* eslint-disable security/detect-object-injection */
 export const AlertRow = memo(({ index, data }: AlertRowProps) => {
   const alert = data[index];
   if (!alert) return null;
