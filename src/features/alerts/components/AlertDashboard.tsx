@@ -9,21 +9,23 @@ export const AlertDashboard = () => {
 
   return (
     <div className="flex flex-col h-screen bg-brand-dark text-white p-4 sm:p-6 font-sans">
-      <header className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
+      <header className="mb-6 grid grid-cols-1 lg:grid-cols-[1fr_auto] items-center gap-6">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight whitespace-nowrap">
           VANTAGE ANALYTICS
         </h1>
 
-        <div className="flex items-center gap-4 w-full sm:w-auto">
-          <SearchBar value={search} onChange={setSearch} />
-          <div className="flex gap-1 bg-brand-surface p-1 rounded border border-brand-border">
+        <div className="flex flex-col md:flex-row items-center gap-4 w-full">
+          <div className="w-full md:w-80">
+            <SearchBar value={search} onChange={setSearch} />
+          </div>
+          <div className="flex w-full md:w-auto bg-brand-surface p-1 rounded border border-brand-border">
             {(["all", "critical", "high", "low"] as const).map((severity) => (
               <button
                 key={severity}
                 onClick={() => setFilter(severity)}
-                className={`px-3 py-1 rounded text-[10px] font-bold uppercase transition-all ${
+                className={`flex-1 md:flex-none px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all ${
                   filter === severity
-                    ? "bg-blue-600 text-white"
+                    ? "bg-blue-600 text-white shadow-lg"
                     : "text-gray-500 hover:text-white"
                 }`}
               >
