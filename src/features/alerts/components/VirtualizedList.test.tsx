@@ -4,13 +4,24 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { Alert } from "../types";
 
 beforeEach(() => {
-  const ResizeObserverMock = vi.fn(() => ({
-    observe: vi.fn(),
-    unobserve: vi.fn(),
-    disconnect: vi.fn(),
-  }));
+  const ResizeObserverMock = vi.fn().mockImplementation(function () {
+    return {
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    };
+  });
 
   vi.stubGlobal("ResizeObserver", ResizeObserverMock);
+
+  Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
+    configurable: true,
+    value: 800,
+  });
+  Object.defineProperty(HTMLElement.prototype, "offsetWidth", {
+    configurable: true,
+    value: 1000,
+  });
 });
 
 const mockAlerts: Alert[] = [
