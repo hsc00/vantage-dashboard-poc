@@ -1,31 +1,30 @@
 import { renderHook, act } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { useAlertFilters } from "./useAlertFilters";
+import type { Alert } from "../types";
 
-vi.mock("../../../mocks/mock-data.json", () => ({
-  default: [
-    {
-      id: "1",
-      timestamp: "2026-01-18T10:00:00Z",
-      sensor: "Sensor A",
-      severity: "high",
-      ip: "2.2.2.2",
-      message: "High Alert",
-    },
-    {
-      id: "2",
-      timestamp: "2026-01-14T10:00:00Z",
-      sensor: "Sensor B",
-      severity: "low",
-      ip: "2.2.2.2",
-      message: "Low Alert",
-    },
-  ],
-}));
+const mockAlerts: Alert[] = [
+  {
+    id: "1",
+    timestamp: "2026-01-18T10:00:00Z",
+    sensor: "Sensor A",
+    severity: "high",
+    ip: "2.2.2.2",
+    message: "High Alert Malware",
+  },
+  {
+    id: "2",
+    timestamp: "2026-01-14T10:00:00Z",
+    sensor: "Sensor B",
+    severity: "low",
+    ip: "2.2.2.2",
+    message: "Low Alert",
+  },
+];
 
 describe("useAlertFilters hook", () => {
   it("should return initial statistics and data", () => {
-    const { result } = renderHook(() => useAlertFilters());
+    const { result } = renderHook(() => useAlertFilters(mockAlerts));
 
     expect(result.current.totalCount).toBe(2);
     expect(result.current.filter).toBe("all");
@@ -33,7 +32,7 @@ describe("useAlertFilters hook", () => {
   });
 
   it("should update filteredCount when changing the filter", () => {
-    const { result } = renderHook(() => useAlertFilters());
+    const { result } = renderHook(() => useAlertFilters(mockAlerts));
 
     act(() => {
       result.current.setFilter("high");
@@ -45,7 +44,7 @@ describe("useAlertFilters hook", () => {
   });
 
   it("should keep totalCount constant even when filtering", () => {
-    const { result } = renderHook(() => useAlertFilters());
+    const { result } = renderHook(() => useAlertFilters(mockAlerts));
 
     act(() => {
       result.current.setFilter("low");
@@ -55,7 +54,7 @@ describe("useAlertFilters hook", () => {
     expect(result.current.totalCount).toBe(2);
   });
   it("should filter by search query and severity simultaneously", () => {
-    const { result } = renderHook(() => useAlertFilters());
+    const { result } = renderHook(() => useAlertFilters(mockAlerts));
 
     act(() => {
       result.current.setFilter("high");

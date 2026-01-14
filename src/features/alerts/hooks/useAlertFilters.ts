@@ -1,21 +1,14 @@
 import { useMemo, useState } from "react";
 import type { Alert, FilterStatus } from "../types";
-import mockData from "../../../mocks/mock-data.json";
 import { sortByTimestampDesc } from "../../../utils/sort";
 
-/**
- * Defined outside the hook to signal to React that this reference is stable
- * and shouldn't be tracked as a re-rendering dependency.
- */
-const alerts = mockData as Alert[];
-
-export const useAlertFilters = () => {
+export const useAlertFilters = (rawAlerts: Alert[]) => {
   const [filter, setFilter] = useState<FilterStatus>("all");
   const [search, setSearch] = useState("");
 
   // useMemo to optimize filtering performance
   const filteredAlerts = useMemo(() => {
-    return alerts
+    return rawAlerts
       .filter((alert) => {
         const matchesFilter = filter === "all" || alert.severity === filter;
         const matchesSearch =
@@ -26,7 +19,7 @@ export const useAlertFilters = () => {
         return matchesFilter && matchesSearch;
       })
       .sort(sortByTimestampDesc);
-  }, [filter, search]);
+  }, [filter, search, rawAlerts]);
 
   return {
     filter,
@@ -34,7 +27,7 @@ export const useAlertFilters = () => {
     search,
     setSearch,
     filteredAlerts,
-    totalCount: alerts.length,
+    totalCount: rawAlerts.length,
     filteredCount: filteredAlerts.length,
   };
 };
