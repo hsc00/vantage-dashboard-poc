@@ -2,10 +2,12 @@ import { useAlertFilters } from "../hooks/useAlertFilters";
 import { SearchBar } from "./SearchBar";
 import { VirtualizedAlertList } from "./VirtualizedList";
 import { ALERT_TABLE_LAYOUT } from "../constants";
+import { useAlertStreams } from "../hooks/useAlertStream";
 
 export const AlertDashboard = () => {
+  const { alerts } = useAlertStreams();
   const { filter, setFilter, search, setSearch, filteredAlerts } =
-    useAlertFilters();
+    useAlertFilters(alerts);
 
   return (
     <div className="flex flex-col h-screen bg-brand-dark text-white p-4 sm:p-6 font-sans">
