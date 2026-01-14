@@ -32,4 +32,10 @@ export default defineConfig([
       "sonarjs/cognitive-complexity": ["error", 15],
     },
   },
+  {
+    files: ["**/*.test.tsx", "**/*.test.ts", "**/mocks/**"],
+    rules: {
+      "sonarjs/no-hardcoded-ip": "off",
+    },
+  },
 ]);
