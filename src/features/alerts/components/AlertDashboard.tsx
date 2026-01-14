@@ -23,11 +23,15 @@ export const AlertDashboard = () => {
               <button
                 key={severity}
                 onClick={() => setFilter(severity)}
-                className={`flex-1 md:flex-none px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all ${
-                  filter === severity
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : "text-gray-500 hover:text-white"
-                }`}
+                className={`
+                  flex-1 md:flex-none px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all
+                  cursor-pointer select-none active:scale-95
+                  ${
+                    filter === severity
+                      ? "bg-blue-600 text-white shadow-lg shadow-blue-900/20"
+                      : "text-gray-500 hover:text-white hover:bg-white/5"
+                  }
+                `}
               >
                 {severity}
               </button>
