@@ -44,24 +44,24 @@ export const VirtualizedAlertList = ({ alerts }: Props) => {
    * 2. If new data: Only scroll to top if the user is already at the top (Sticky Scroll).
    * 3. If investigating: If user scrolled down, we don't jump, preserving their focus.
    */
+  // Synchronously adjusts scroll position before the browser paints to prevent visual flickering.
   useLayoutEffect(() => {
-    const isFiltering = alerts.length < lastCountRef.current;
-    const isNewData = alerts.length > lastCountRef.current;
+    const currentCount = alerts.length;
+    const prevCount = lastCountRef.current;
+    const delta = currentCount - prevCount;
 
-    if (isFiltering) {
+    if (delta === 0) return;
+
+    lastCountRef.current = currentCount;
+
+    // Case 1 and 2: Scroll to top if filtering or if new data and user is at top
+    if (delta < 0 || isAtTop.current) {
       rowVirtualizer.scrollToOffset(0);
-    } else if (isNewData) {
-      if (isAtTop.current) {
-        rowVirtualizer.scrollToOffset(0);
-      } else {
-        const delta = (alerts.length - lastCountRef.current) * 48;
-        if (parentRef.current) {
-          parentRef.current.scrollTop += delta;
-        }
-      }
+      return;
     }
 
-    lastCountRef.current = alerts.length;
+    // User is scrolled down, preserve position
+    parentRef.current?.scrollBy({ top: delta * 48 });
   }, [alerts.length, rowVirtualizer]);
 
   if (alerts.length === 0) {

@@ -13,7 +13,7 @@ const streamMessages = streamMessagesRaw as Record<
  */
 const getSafeRandom = () => {
   const array = new Uint32Array(1);
-  window.crypto.getRandomValues(array);
+  globalThis.crypto.getRandomValues(array);
   return array[0] / (0xffffffff + 1);
 };
 
