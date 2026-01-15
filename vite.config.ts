@@ -10,6 +10,12 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],
+      exclude: [
+        "src/mocks/**",
+        "src/types/**",
+        "**/*.test.tsx",
+        "src/main.tsx",
+      ],
     },
   },
 });
