@@ -52,7 +52,7 @@ describe("VirtualizedAlertList", () => {
   const mockAlerts = (num: number): Alert[] =>
     Array.from({ length: num }).map((_, i) => ({
       id: `${i}`,
-      severity: "info" as Severity,
+      severity: "low" as Severity,
       message: "test",
       timestamp: new Date().toISOString(),
       sensor: "test-sensor",
