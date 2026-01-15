@@ -78,10 +78,14 @@ This project follows a "Security by Design" approach, implementing a professiona
 
 ### Future Roadmap
 
-- [x] Real-time Stream: Integration of WebSockets or Server-Sent Events (SSE) to simulate live industrial traffic and handle asynchronous state updates.
+- [x] **Real-time Stream**: Integration of WebSockets or Server-Sent Events (SSE) to simulate live industrial traffic and handle asynchronous state updates.
 
-- [x] Advanced Debouncing: Implementing a search debounce for datasets exceeding 50,000 records to further optimize the main thread and prevent UI stuttering.
+- [x] **Advanced Debouncing**: Implementing a search debounce for datasets exceeding 50,000 records to further optimize the main thread and prevent UI stuttering.
 
-- A11y Compliance: Further enhancement of ARIA labels, focus management, and keyboard navigation for full WCAG compliance in enterprise environments.
+- **A11y Compliance**: Further enhancement of ARIA labels, focus management, and keyboard navigation for full WCAG compliance in enterprise environments.
 
-- Event Batching & Throttling: Implementing a transition buffer to group incoming alerts during high velocity bursts (e.g., a DDoS attack). Instead of immediate state updates, the UI would batch events every 100ms-250ms to prevent main-thread starvation and ensure the dashboard remains interactive.
+- **Event Batching & Throttling**: Implementing a transition buffer to group incoming alerts during high velocity bursts (e.g., a DDoS attack). Instead of immediate state updates, the UI would batch events every 100ms-250ms to prevent main-thread starvation and ensure the dashboard remains interactive.
+
+- **Advanced Layout Resiliency**: Integration of ResizeObserver within the virtualizer to handle dynamic container resizing. This ensures that the custom scroll compensation logic remains pixel-perfect even when the user toggles sidebars or resizes the browser window.
+
+- **Multi-language Support (i18n)**: Architecture is ready to be wrapped in a localization provider (e.g., react-i18next). All UI strings are centralized to facilitate translation into multiple languages.
