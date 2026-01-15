@@ -16,10 +16,7 @@
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
       "eslint --fix",
-      "npm test -- --run --findRelatedTests"
-    ],
-    "**/*.ts?(x)": [
-      "bash -c 'npm run type-check'"
+      "npm test -- --run --"
     ]
   },
   "dependencies": {

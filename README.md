@@ -10,6 +10,7 @@ A high-performance Cybersecurity Alert Dashboard implementation, inspired by the
 - **Multi-level Filtering:** Combined real-time severity filters and a global search engine (supporting both Message and Source IP).
 - **Smart State Architecture:** Logic centralized in custom Hooks with `useMemo` optimizations to prevent unnecessary re calculations during state updates.
 - **Enterprise UI:** A professional dark mode UI built with Tailwind CSS and Lucide Icons, optimized for high-density information display, inspired by the Nozomi Vantage images available online.
+- **Search Optimization:** Implementation of a custom Debounce mechanism to ensure the main thread remains responsive even during heavy filtering operations on large datasets.
 
 ## Tech Stack
 
@@ -21,9 +22,13 @@ A high-performance Cybersecurity Alert Dashboard implementation, inspired by the
 
 ## Engineering Insights
 
-### 1. Performance at Scale
+### 1. Performance at Scale & Computational Efficiency
 
-In industrial monitoring, alert logs can grow exponentially. Instead of bloating the DOM, I used **Virtualization**. This ensures the browser only processes the rows currently in view, allowing the dashboard to scale to massive datasets without UI lag.
+In industrial monitoring, alert logs can grow exponentially. To handle this, I implemented a dual-layer optimization strategy:
+**DOM Layer (Virtualization):** Using @tanstack/react-virtual to ensure the browser only processes visible rows, maintaining performance.
+**Logic Layer (Debouncing & Memoization):** Filtering and sorting are computationally expensive (approaching O(n log n) due to sorting). I implemented a custom useDebounce hook to ensure these operations only trigger 300ms after the user stops typing. This prevents "input lag" and minimizes CPU cycles, a critical requirement for high density dashboards.
+
+Note on Implementation: I opted for a custom useDebounce hook instead of an external library to demonstrate understanding of React's useEffect cleanup patterns and to keep the bundle size minimal.
 
 ### 2. Testing Strategy & Reliability
 
@@ -73,6 +78,6 @@ This project follows a "Security by Design" approach, implementing a professiona
 
 - [x] Real-time Stream: Integration of WebSockets or Server-Sent Events (SSE) to simulate live industrial traffic and handle asynchronous state updates.
 
-- Advanced Debouncing: Implementing a search debounce for datasets exceeding 50,000 records to further optimize the main thread and prevent UI stuttering.
+- [x] Advanced Debouncing: Implementing a search debounce for datasets exceeding 50,000 records to further optimize the main thread and prevent UI stuttering.
 
 - A11y Compliance: Further enhancement of ARIA labels, focus management, and keyboard navigation for full WCAG compliance in enterprise environments.

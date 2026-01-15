@@ -12,12 +12,12 @@ This document outlines the architectural choices made during the development of 
 - **Dynamic Measurement**: It offers superior support for dynamic row heights and smoother scrolling synchronization compared to older libraries like `react-window`.
 - **Logic/UI Separation**: Perfectly aligns with our architecture of keeping logic in hooks and UI in pure components.
 
-## 2. Decoupled Filtering Logic (`useAlertFilters`)
+## 2. Optimized Filtering Engine (`useAlertFilters` + `Debounce`)
 
-**Decision:** Separate the UI from the filtering/sorting logic.
-**Why:** - **Testability**: We can test the filtering engine in isolation without mounting React components.
-
-- **Performance**: Leveraging `useMemo` inside the hook ensures that we only re-filter data when the `alerts`, `filter`, or `search` query actually change, avoiding expensive re-computations on every render.
+- **Decision:** Implemented a debounced filtering strategy using useMemo and a custom useDebounce hook. **Why:**
+- **Main Thread Preservation:** Filtering and sorting large datasets are O(n log n) operations. Without a debounce, typing a 10 character search term would trigger 10 expensive re-computations.
+- **Computational Efficiency:** By introducing a 300ms delay, we ensure the engine only runs once per user intent, significantly reducing CPU cycles and preventing input lag.
+- **UX/Performance Balance:** The search state remains immediate for UI responsiveness, while the debouncedSearch controls the heavy lifting.
 
 ## 3. Real-time Stream Architecture (`useAlertStreams`)
 
@@ -33,6 +33,7 @@ This document outlines the architectural choices made during the development of 
 
 - **Cryptographic Entropy**: Replaced `Math.random()` with `window.crypto.getRandomValues()` for unique ID generation, preventing PRNG predictability.
 - **Static Analysis**: Integrated `eslint-plugin-security` and `sonarjs` to catch vulnerabilities during development.
+- **Commit Integrity**: Enforced GPG signed commits to ensure authorship provenance and prevent code tampering in the repository history.
 
 ## 5. Automated Quality Gates (Husky & Vitest)
 
