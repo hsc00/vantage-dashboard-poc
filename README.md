@@ -2,14 +2,14 @@
 
 ![CI Status](https://github.com/hsc00/vantage-poc/actions/workflows/ci.yml/badge.svg)
 
-A high-performance Cybersecurity Alert Dashboard implementation, inspired by the **Nozomi Networks Vantage** product. This project focuses on data density, rendering efficiency, and logical robustness in mission critical environments.
+A high-performance Cybersecurity Alert Dashboard implementation PoC, inspired by the **Nozomi Networks Vantage** product. This project focuses on data density, rendering efficiency, and logical robustness in mission critical environments.
 
 ## Key Features
 
 - **Data Virtualization:** Implemented `@tanstack/react-virtual` to handle thousands of security logs while maintaining a smooth 60 FPS by rendering only the visible viewport.
 - **Multi-level Filtering:** Combined real-time severity filters and a global search engine (supporting both Message and Source IP).
 - **Smart State Architecture:** Logic centralized in custom Hooks with `useMemo` optimizations to prevent unnecessary re calculations during state updates.
-- **Enterprise UI:** A professional dark mode UI built with Tailwind CSS and Lucide Icons, optimized for high-density information display, inspired by the Nozomi Vantage images available online.
+- **Enterprise UI:** A professional dark mode UI built with Tailwind CSS and Lucide Icons, optimized for high-density information display, inspired by the Nozomi Vantage.
 - **Search Optimization:** Implementation of a custom Debounce mechanism to ensure the main thread remains responsive even during heavy filtering operations on large datasets.
 
 ## Tech Stack
