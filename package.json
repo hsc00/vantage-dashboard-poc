@@ -11,12 +11,16 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky",
+    "audit": "npm audit --audit-level=moderate",
+    "audit:fix": "npm audit fix",
+    "deps:check": "npm outdated",
+    "deps:update": "npm update"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
       "eslint --fix",
-      "npm test -- --run --"
+      "vitest related --run"
     ]
   },
   "dependencies": {
@@ -33,7 +37,7 @@
     "@eslint/js": "^9.39.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.1",
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.0.8",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
@@ -43,8 +47,8 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "eslint-plugin-security": "^3.0.1",
     "eslint-plugin-sonarjs": "^3.0.5",
-    "globals": "^16.5.0",
-    "husky": "^8.0.0",
+    "globals": "^17.0.0",
+    "husky": "^9.1.7",
     "jsdom": "^27.4.0",
     "lint-staged": "^16.2.7",
     "typescript": "~5.9.3",
