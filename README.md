@@ -71,7 +71,7 @@ This project follows a "Security by Design" approach, implementing a professiona
 
 ### Future Roadmap
 
-- Real-time Stream: Integration of WebSockets or Server-Sent Events (SSE) to simulate live industrial traffic and handle asynchronous state updates.
+- [x] Real-time Stream: Integration of WebSockets or Server-Sent Events (SSE) to simulate live industrial traffic and handle asynchronous state updates.
 
 - Advanced Debouncing: Implementing a search debounce for datasets exceeding 50,000 records to further optimize the main thread and prevent UI stuttering.
 
