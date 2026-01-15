@@ -29,7 +29,7 @@ In industrial monitoring, alert logs can grow exponentially. To handle this, I i
 **Logic Layer (Debouncing & Memoization):** Filtering and sorting are computationally expensive (approaching O(n log n) due to sorting). I implemented a custom useDebounce hook to ensure these operations only trigger 300ms after the user stops typing. This prevents "input lag" and minimizes CPU cycles, a critical requirement for high density dashboards. I opted for a custom useDebounce hook instead of an external library to demonstrate understanding of React's useEffect cleanup patterns and to keep the bundle size minimal.
 
 - **Rolling Buffer:** The data stream is capped at 5000 records to prevent memory leaks and ensure consistent state update speeds.
-- **Optimized Filtering:** Search queries are debounced and normalized outside the filter loop to reduce CPU overhead from $O(n)$ to $O(1)$ per render cycle.
+- **Optimized Filtering:** Search queries are debounced and normalized outside the filter loop to reduce CPU overhead from O(n) to O(1) per render cycle.
 - **Resource Management:** The alert generator respects the Page Visibility API, pausing background tasks when the dashboard is not in focus.
 
 ### 2. Testing Strategy & Reliability
