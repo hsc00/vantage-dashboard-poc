@@ -30,7 +30,7 @@ export const VirtualizedAlertList = ({ alerts }: Props) => {
     getScrollElement: () => parentRef.current,
     estimateSize: () => ALERT_CONFIG.ROW_HEIGHT_PX,
     overscan: 5,
-    getItemKey: (index) => alerts[index]?.id ?? index, // Keys to help the virtualizer maintain position when items are prepended
+    getItemKey: (index) => alerts.at(index)?.id ?? index, // Keys to help the virtualizer maintain position when items are prepended
   });
 
   // Monitor scroll to determine if we should follow the stream or stay at current position
