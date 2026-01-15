@@ -20,8 +20,12 @@ const getSafeRandom = () => {
 export const useAlertStreams = () => {
   const [alerts, setAlerts] = useState<Alert[]>([]);
 
+  // Keep alerts list capped at 5000 entries to prevent memory bloat
   const addAlert = useCallback((newAlert: Alert) => {
-    setAlerts((prev) => [newAlert, ...prev]);
+    setAlerts((prev) => {
+      const updated = [newAlert, ...prev];
+      return updated.slice(0, 5000);
+    });
   }, []);
 
   useEffect(() => {
