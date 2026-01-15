@@ -56,4 +56,35 @@ describe("AlertRow Component", () => {
     expect(badge.className).toContain("text-status-low");
     expect(screen.getByText("172.16.0.1")).toBeDefined();
   });
+
+  it("renders default styles for unknown severity", () => {
+    const unknownData: Alert[] = [
+      {
+        id: "4",
+        timestamp: "2026-01-14T13:00:00Z",
+        sensor: "Sensor D",
+        severity: "unsupported-value" as unknown as Alert["severity"],
+        message: "Unknown severity test",
+        ip: "0.0.0.0",
+      },
+    ];
+
+    render(<AlertRow index={0} data={unknownData} />);
+
+    const badge = screen.getByText("unsupported-value");
+    expect(badge.className).toContain("text-gray-500");
+  });
+
+  it("formats the timestamp correctly", () => {
+    render(<AlertRow index={0} data={MOCK_DATA} />);
+    const timestamp = screen.getByText(/\d{2}:\d{2}/);
+
+    expect(timestamp).toBeDefined();
+    expect(timestamp.textContent).toContain("10:00");
+    expect(timestamp.textContent).toContain("14/01");
+  });
+
+  it("has the correct display name for debugging", () => {
+    expect(AlertRow.displayName).toBe("AlertRow");
+  });
 });
