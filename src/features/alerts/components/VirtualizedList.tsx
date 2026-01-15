@@ -8,6 +8,7 @@
 import { useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { AlertRow } from "./AlertRow";
+import { useEffect } from "react";
 import type { Alert } from "../types";
 
 interface Props {
@@ -29,6 +30,20 @@ export const VirtualizedAlertList = ({ alerts }: Props) => {
     estimateSize: () => 48,
     overscan: 5,
   });
+
+  /**
+   * Zombie Scroll Prevention
+   * When the alerts list is filtered, the total scrollable height changes.
+   * We force the scroll position back to the top to prevent the virtualizer
+   * from being stuck in a scroll offset that no longer exists.
+   */
+  const lastCountRef = useRef(alerts.length);
+  useEffect(() => {
+    if (alerts.length < lastCountRef.current) {
+      rowVirtualizer.scrollToOffset(0);
+    }
+    lastCountRef.current = alerts.length;
+  }, [alerts.length, rowVirtualizer]);
 
   if (alerts.length === 0) {
     return (
