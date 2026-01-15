@@ -2,11 +2,12 @@ import { useMemo, useState } from "react";
 import type { Alert, FilterStatus } from "../types";
 import { sortByTimestampDesc } from "../../../utils/sort";
 import { useDebounce } from "../../../hooks/useDebounce";
+import { ALERT_CONFIG } from "../config";
 
 export const useAlertFilters = (rawAlerts: Alert[]) => {
   const [filter, setFilter] = useState<FilterStatus>("all");
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 300);
+  const debouncedSearch = useDebounce(search, ALERT_CONFIG.DEBOUNCE_DELAY_MS);
 
   /**
    * We use useMemo combined with debouncedSearch to ensure that heavy filtering

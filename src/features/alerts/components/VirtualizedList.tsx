@@ -9,6 +9,7 @@ import { useRef, useLayoutEffect } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { AlertRow } from "./AlertRow";
 import type { Alert } from "../types";
+import { ALERT_CONFIG } from "../config";
 
 interface Props {
   alerts: Alert[];
@@ -27,15 +28,16 @@ export const VirtualizedAlertList = ({ alerts }: Props) => {
   const rowVirtualizer = useVirtualizer({
     count: alerts.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 48,
+    estimateSize: () => ALERT_CONFIG.ROW_HEIGHT_PX,
     overscan: 5,
     getItemKey: (index) => alerts[index]?.id ?? index, // Keys to help the virtualizer maintain position when items are prepended
   });
 
   // Monitor scroll to determine if we should follow the stream or stay at current position
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    // 5px threshold to account for sub-pixel precision and small movements
-    isAtTop.current = e.currentTarget.scrollTop <= 5;
+    // 10px threshold to account for sub-pixel precision and small movements
+    isAtTop.current =
+      e.currentTarget.scrollTop <= ALERT_CONFIG.SCROLL_THRESHOLD_PX;
   };
 
   /**
@@ -61,7 +63,7 @@ export const VirtualizedAlertList = ({ alerts }: Props) => {
     }
 
     // User is scrolled down, preserve position
-    parentRef.current?.scrollBy({ top: delta * 48 });
+    parentRef.current?.scrollBy({ top: delta * ALERT_CONFIG.ROW_HEIGHT_PX });
   }, [alerts.length, rowVirtualizer]);
 
   if (alerts.length === 0) {

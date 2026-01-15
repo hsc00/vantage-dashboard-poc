@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type { Alert } from "../types";
 import streamMessagesRaw from "../mocks/stream-messages.json";
+import { ALERT_CONFIG } from "../config";
 
 const streamMessages = streamMessagesRaw as Record<
   "critical" | "high" | "low",
@@ -24,7 +25,7 @@ export const useAlertStreams = () => {
   const addAlert = useCallback((newAlert: Alert) => {
     setAlerts((prev) => {
       const updated = [newAlert, ...prev];
-      return updated.slice(0, 5000);
+      return updated.slice(0, ALERT_CONFIG.MAX_ALERTS_BUFFER);
     });
   }, []);
 
@@ -65,7 +66,7 @@ export const useAlertStreams = () => {
       };
 
       addAlert(randomAlert);
-    }, 4000);
+    }, ALERT_CONFIG.STREAM_INTERVAL_MS);
 
     return () => clearInterval(interval);
   }, [addAlert]);
