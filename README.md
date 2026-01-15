@@ -40,7 +40,7 @@ I followed a testing strategy focused on high-value coverage:
 - **Custom Hooks:** Isolated testing of `useAlertFilters` to ensure search logic is bulletproof, including locale sensitive comparisons to handle international character sets.
 - **Component Integration:** Verifying that user interactions (filtering, searching, clearing) correctly update the virtualized list.
 
-### 3. Maintainability & "Clean Code"
+### 3. Maintainability & Clean Code
 
 To avoid the common "utility class soup" in Tailwind projects, I extracted complex styling patterns into static constants at the bottom of component files. This separates **Layout Structure** from **Styling Configuration**, making the code more readable and easier to audit during Peer Reviews.
 
