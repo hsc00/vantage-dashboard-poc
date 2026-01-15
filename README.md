@@ -2,14 +2,14 @@
 
 ![CI Status](https://github.com/hsc00/vantage-poc/actions/workflows/ci.yml/badge.svg)
 
-A high-performance Cybersecurity Alert Dashboard implementation, inspired by the **Nozomi Networks Vantage** product. This project focuses on data density, rendering efficiency, and logical robustness in mission critical environments.
+A high-performance Cybersecurity Alert Dashboard implementation PoC, inspired by the **Nozomi Networks Vantage** product. This project focuses on data density, rendering efficiency, and logical robustness in mission critical environments.
 
 ## Key Features
 
 - **Data Virtualization:** Implemented `@tanstack/react-virtual` to handle thousands of security logs while maintaining a smooth 60 FPS by rendering only the visible viewport.
 - **Multi-level Filtering:** Combined real-time severity filters and a global search engine (supporting both Message and Source IP).
 - **Smart State Architecture:** Logic centralized in custom Hooks with `useMemo` optimizations to prevent unnecessary re calculations during state updates.
-- **Enterprise UI:** A professional dark mode UI built with Tailwind CSS and Lucide Icons, optimized for high-density information display, inspired by the Nozomi Vantage images available online.
+- **Enterprise UI:** A professional dark mode UI built with Tailwind CSS and Lucide Icons, optimized for high-density information display, inspired by the Nozomi Vantage.
 - **Search Optimization:** Implementation of a custom Debounce mechanism to ensure the main thread remains responsive even during heavy filtering operations on large datasets.
 
 ## Tech Stack
@@ -26,9 +26,11 @@ A high-performance Cybersecurity Alert Dashboard implementation, inspired by the
 
 In industrial monitoring, alert logs can grow exponentially. To handle this, I implemented a dual-layer optimization strategy:
 **DOM Layer (Virtualization):** Using @tanstack/react-virtual to ensure the browser only processes visible rows, maintaining performance.
-**Logic Layer (Debouncing & Memoization):** Filtering and sorting are computationally expensive (approaching O(n log n) due to sorting). I implemented a custom useDebounce hook to ensure these operations only trigger 300ms after the user stops typing. This prevents "input lag" and minimizes CPU cycles, a critical requirement for high density dashboards.
+**Logic Layer (Debouncing & Memoization):** Filtering and sorting are computationally expensive (approaching O(n log n) due to sorting). I implemented a custom useDebounce hook to ensure these operations only trigger 300ms after the user stops typing. This prevents "input lag" and minimizes CPU cycles, a critical requirement for high density dashboards. I opted for a custom useDebounce hook instead of an external library to demonstrate understanding of React's useEffect cleanup patterns and to keep the bundle size minimal.
 
-Note on Implementation: I opted for a custom useDebounce hook instead of an external library to demonstrate understanding of React's useEffect cleanup patterns and to keep the bundle size minimal.
+- **Rolling Buffer:** The data stream is capped at 5000 records to prevent memory leaks and ensure consistent state update speeds.
+- **Optimized Filtering:** Search queries are debounced and normalized outside the filter loop to reduce CPU overhead from O(n) to O(1) per render cycle.
+- **Resource Management:** The alert generator respects the Page Visibility API, pausing background tasks when the dashboard is not in focus.
 
 ### 2. Testing Strategy & Reliability
 
@@ -38,7 +40,7 @@ I followed a testing strategy focused on high-value coverage:
 - **Custom Hooks:** Isolated testing of `useAlertFilters` to ensure search logic is bulletproof, including locale sensitive comparisons to handle international character sets.
 - **Component Integration:** Verifying that user interactions (filtering, searching, clearing) correctly update the virtualized list.
 
-### 3. Maintainability & "Clean Code"
+### 3. Maintainability & Clean Code
 
 To avoid the common "utility class soup" in Tailwind projects, I extracted complex styling patterns into static constants at the bottom of component files. This separates **Layout Structure** from **Styling Configuration**, making the code more readable and easier to audit during Peer Reviews.
 
@@ -76,8 +78,14 @@ This project follows a "Security by Design" approach, implementing a professiona
 
 ### Future Roadmap
 
-- [x] Real-time Stream: Integration of WebSockets or Server-Sent Events (SSE) to simulate live industrial traffic and handle asynchronous state updates.
+- [x] **Real-time Stream**: Integration of WebSockets or Server-Sent Events (SSE) to simulate live industrial traffic and handle asynchronous state updates.
 
-- [x] Advanced Debouncing: Implementing a search debounce for datasets exceeding 50,000 records to further optimize the main thread and prevent UI stuttering.
+- [x] **Advanced Debouncing**: Implementing a search debounce for datasets exceeding 50,000 records to further optimize the main thread and prevent UI stuttering.
 
-- A11y Compliance: Further enhancement of ARIA labels, focus management, and keyboard navigation for full WCAG compliance in enterprise environments.
+- **A11y Compliance**: Further enhancement of ARIA labels, focus management, and keyboard navigation for full WCAG compliance in enterprise environments.
+
+- **Event Batching & Throttling**: Implementing a transition buffer to group incoming alerts during high velocity bursts (e.g., a DDoS attack). Instead of immediate state updates, the UI would batch events every 100ms-250ms to prevent main-thread starvation and ensure the dashboard remains interactive.
+
+- **Advanced Layout Resiliency**: Integration of ResizeObserver within the virtualizer to handle dynamic container resizing. This ensures that the custom scroll compensation logic remains pixel-perfect even when the user toggles sidebars or resizes the browser window.
+
+- **Multi-language Support (i18n)**: Architecture is ready to be wrapped in a localization provider (e.g., react-i18next). All UI strings are centralized to facilitate translation into multiple languages.

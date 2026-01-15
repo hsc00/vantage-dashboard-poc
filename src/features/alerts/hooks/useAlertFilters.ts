@@ -14,13 +14,15 @@ export const useAlertFilters = (rawAlerts: Alert[]) => {
    * This prevents Main Thread blocking and UI stuttering on large datasets.
    */
   const filteredAlerts = useMemo(() => {
+    const normalizedQuery = debouncedSearch.trim().toLocaleLowerCase();
+
     return rawAlerts
       .filter((alert) => {
         const matchesFilter = filter === "all" || alert.severity === filter;
-        const searchLower = debouncedSearch.toLocaleLowerCase();
+        if (!normalizedQuery) return matchesFilter;
         const matchesSearch =
-          alert.message.toLocaleLowerCase().includes(searchLower) ||
-          alert.ip.includes(searchLower);
+          alert.message.toLocaleLowerCase().includes(normalizedQuery) ||
+          alert.ip.includes(normalizedQuery);
 
         return matchesFilter && matchesSearch;
       })

@@ -46,4 +46,14 @@ This document outlines the architectural choices made during the development of 
 ## 6. CSS Architecture (Tailwind structure)
 
 **Decision:** Use Tailwind for rapid UI development with a custom `brand` color palette.
-**Why:** - **Consistency**: Centralized theme for "brand" colors, ensuring the dashboard matches the security-industrial aesthetic of the Vantage product.
+**Why:**
+
+- **Consistency**: Centralized theme for "brand" colors, ensuring the dashboard matches the security-industrial aesthetic of the Vantage product.
+
+## 7. Memory Management (Rolling Buffer Strategy)
+
+**Decision:** Implemented a fixed size rolling buffer for the live data stream.
+**Why:**
+
+- **Memory Leak Prevention:** In professional monitoring environments, dashboards remain open for days. Without a cap, the alerts array would grow indefinitely, eventually crashing the browser tab.
+  **Constant Time Performance:** By limiting the state to 5000 entries using slice, we guarantee that filtering and rendering performance remains constant relative to session duration regardless of how long the stream has been running.
