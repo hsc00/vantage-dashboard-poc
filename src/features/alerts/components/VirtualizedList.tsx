@@ -85,18 +85,24 @@ export const VirtualizedAlertList = ({ alerts }: Props) => {
           position: "relative",
         }}
       >
-        {rowVirtualizer.getVirtualItems().map((virtualRow) => (
-          <div
-            key={virtualRow.index}
-            className="absolute top-0 left-0 w-full"
-            style={{
-              height: `${virtualRow.size}px`,
-              transform: `translateY(${virtualRow.start}px)`,
-            }}
-          >
-            <AlertRow index={virtualRow.index} data={alerts} />
-          </div>
-        ))}
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const alert = alerts[virtualRow.index];
+          // If alert is undefined skip rendering this row
+          if (!alert) return null;
+
+          return (
+            <div
+              key={virtualRow.key}
+              className="absolute top-0 left-0 w-full"
+              style={{
+                height: `${virtualRow.size}px`,
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+            >
+              <AlertRow index={virtualRow.index} data={alerts} />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

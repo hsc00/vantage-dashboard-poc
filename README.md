@@ -83,3 +83,5 @@ This project follows a "Security by Design" approach, implementing a professiona
 - [x] Advanced Debouncing: Implementing a search debounce for datasets exceeding 50,000 records to further optimize the main thread and prevent UI stuttering.
 
 - A11y Compliance: Further enhancement of ARIA labels, focus management, and keyboard navigation for full WCAG compliance in enterprise environments.
+
+- Event Batching & Throttling: Implementing a transition buffer to group incoming alerts during high velocity bursts (e.g., a DDoS attack). Instead of immediate state updates, the UI would batch events every 100ms-250ms to prevent main-thread starvation and ensure the dashboard remains interactive.
