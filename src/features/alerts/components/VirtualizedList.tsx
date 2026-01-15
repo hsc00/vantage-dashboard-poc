@@ -9,6 +9,7 @@ import { useRef, useLayoutEffect } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { AlertRow } from "./AlertRow";
 import type { Alert } from "../types";
+import { ALERT_CONFIG } from "../config";
 
 interface Props {
   alerts: Alert[];
@@ -27,15 +28,16 @@ export const VirtualizedAlertList = ({ alerts }: Props) => {
   const rowVirtualizer = useVirtualizer({
     count: alerts.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 48,
+    estimateSize: () => ALERT_CONFIG.ROW_HEIGHT_PX,
     overscan: 5,
     getItemKey: (index) => alerts[index]?.id ?? index, // Keys to help the virtualizer maintain position when items are prepended
   });
 
   // Monitor scroll to determine if we should follow the stream or stay at current position
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    // 5px threshold to account for sub-pixel precision and small movements
-    isAtTop.current = e.currentTarget.scrollTop <= 5;
+    // 10px threshold to account for sub-pixel precision and small movements
+    isAtTop.current =
+      e.currentTarget.scrollTop <= ALERT_CONFIG.SCROLL_THRESHOLD_PX;
   };
 
   /**
@@ -44,24 +46,24 @@ export const VirtualizedAlertList = ({ alerts }: Props) => {
    * 2. If new data: Only scroll to top if the user is already at the top (Sticky Scroll).
    * 3. If investigating: If user scrolled down, we don't jump, preserving their focus.
    */
+  // Synchronously adjusts scroll position before the browser paints to prevent visual flickering.
   useLayoutEffect(() => {
-    const isFiltering = alerts.length < lastCountRef.current;
-    const isNewData = alerts.length > lastCountRef.current;
+    const currentCount = alerts.length;
+    const prevCount = lastCountRef.current;
+    const delta = currentCount - prevCount;
 
-    if (isFiltering) {
+    if (delta === 0) return;
+
+    lastCountRef.current = currentCount;
+
+    // Case 1 and 2: Scroll to top if filtering or if new data and user is at top
+    if (delta < 0 || isAtTop.current) {
       rowVirtualizer.scrollToOffset(0);
-    } else if (isNewData) {
-      if (isAtTop.current) {
-        rowVirtualizer.scrollToOffset(0);
-      } else {
-        const delta = (alerts.length - lastCountRef.current) * 48;
-        if (parentRef.current) {
-          parentRef.current.scrollTop += delta;
-        }
-      }
+      return;
     }
 
-    lastCountRef.current = alerts.length;
+    // User is scrolled down, preserve position
+    parentRef.current?.scrollBy({ top: delta * ALERT_CONFIG.ROW_HEIGHT_PX });
   }, [alerts.length, rowVirtualizer]);
 
   if (alerts.length === 0) {

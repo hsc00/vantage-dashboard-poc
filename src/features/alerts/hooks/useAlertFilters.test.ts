@@ -1,7 +1,11 @@
 import { renderHook, act } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { useAlertFilters } from "./useAlertFilters";
 import type { Alert } from "../types";
+
+vi.mock("../../../hooks/useDebounce", () => ({
+  useDebounce: (value: string) => value,
+}));
 
 const mockAlerts: Alert[] = [
   {
@@ -9,7 +13,7 @@ const mockAlerts: Alert[] = [
     timestamp: "2026-01-18T10:00:00Z",
     sensor: "Sensor A",
     severity: "high",
-    ip: "2.2.2.2",
+    ip: "192.168.1.1",
     message: "High Alert Malware",
   },
   {
@@ -27,7 +31,7 @@ describe("useAlertFilters hook", () => {
     const { result } = renderHook(() => useAlertFilters(mockAlerts));
 
     expect(result.current.totalCount).toBe(2);
-    expect(result.current.filter).toBe("all");
+    expect(result.current.filteredCount).toBe(2);
     expect(result.current.filteredAlerts[0].id).toBe("1");
   });
 
@@ -43,6 +47,28 @@ describe("useAlertFilters hook", () => {
     expect(result.current.filteredAlerts[0].severity).toBe("high");
   });
 
+  it("should filter by severity", () => {
+    const { result } = renderHook(() => useAlertFilters(mockAlerts));
+
+    act(() => {
+      result.current.setFilter("high");
+    });
+
+    expect(result.current.filteredCount).toBe(1);
+    expect(result.current.filteredAlerts[0].severity).toBe("high");
+  });
+
+  it("should filter by search query in IP address", () => {
+    const { result } = renderHook(() => useAlertFilters(mockAlerts));
+
+    act(() => {
+      result.current.setSearch("192.168");
+    });
+
+    expect(result.current.filteredCount).toBe(1);
+    expect(result.current.filteredAlerts[0].ip).toBe("192.168.1.1");
+  });
+
   it("should keep totalCount constant even when filtering", () => {
     const { result } = renderHook(() => useAlertFilters(mockAlerts));
 
@@ -53,6 +79,17 @@ describe("useAlertFilters hook", () => {
     expect(result.current.filteredCount).toBe(1);
     expect(result.current.totalCount).toBe(2);
   });
+
+  it("should return empty array when no matches found", () => {
+    const { result } = renderHook(() => useAlertFilters(mockAlerts));
+
+    act(() => {
+      result.current.setSearch("non-existent");
+    });
+
+    expect(result.current.filteredCount).toBe(0);
+  });
+
   it("should filter by search query and severity simultaneously", () => {
     const { result } = renderHook(() => useAlertFilters(mockAlerts));
 
@@ -67,5 +104,26 @@ describe("useAlertFilters hook", () => {
           alert.severity === "high" && alert.message.includes("Malware")
       )
     ).toBe(true);
+  });
+
+  it("should handle combined filter and search where filter fails (branch coverage)", () => {
+    const { result } = renderHook(() => useAlertFilters(mockAlerts));
+
+    act(() => {
+      result.current.setFilter("high");
+      result.current.setSearch("System"); // low severity message
+    });
+
+    expect(result.current.filteredCount).toBe(0);
+  });
+
+  it("should handle empty search with whitespace (branch: normalizedQuery check)", () => {
+    const { result } = renderHook(() => useAlertFilters(mockAlerts));
+
+    act(() => {
+      result.current.setSearch("   ");
+    });
+
+    expect(result.current.filteredCount).toBe(2);
   });
 });
