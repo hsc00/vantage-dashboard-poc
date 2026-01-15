@@ -30,6 +30,8 @@ export const useAlertStreams = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (document.hidden) return;
+
       const randomValue = getSafeRandom();
       // Typed record to ensure streamMessages keys are valid severity levels
       let severity: "critical" | "high" | "low";
